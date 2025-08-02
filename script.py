@@ -4,12 +4,19 @@ BOT_TOKEN = "8162961504:AAHp24_bD5ayqdfx1-b1rLpLX9c7WQC0eU8"
 CHAT_ID = "1274709265"
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept": "application/json, text/plain, */*",
+    "Referer": "https://www.nseindia.com/"
+
 }
 
 def get_nifty_50_data():
-    url = "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050"
     session = requests.Session()
+    # Step 1: Get cookies by hitting the homepage first
+    session.get("https://www.nseindia.com", headers=HEADERS)
+    # Step 2: Now call the API with cookies and headers
+    url = "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050"
     response = session.get(url, headers=HEADERS)
     response.raise_for_status()
     data = response.json()
@@ -18,7 +25,7 @@ def get_nifty_50_data():
     results = []
     for stock in stocks:
         if stock.get("identifier") == "NIFTY 50":
-            continue  # skip index summary row
+            continue
         symbol = stock.get("symbol", "N/A")
         name = stock.get("meta", {}).get("companyName", "")
         current = stock.get("lastPrice", 0)
