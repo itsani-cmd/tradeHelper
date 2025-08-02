@@ -1,5 +1,6 @@
 name: NIFTY 50 Daily Report
 
+
 on:
   schedule:
     - cron: '30 2 * * *'  # This is 8:00 AM IST (which is 2:30 AM UTC)
@@ -9,6 +10,11 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests nsepython
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
